@@ -5,6 +5,7 @@ class Game {
         this.blackCards = blackCards
         this.whiteCards = whiteCards
     }
+    
     currentBlackCard = null
     guessCards = null
     sockets = []
@@ -43,7 +44,7 @@ class Game {
         console.log("Ожидаем!")
         for (let socket of this.sockets) {
             socket.score = 0
-            socket.emit('waitRound', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игрока(ов).`)
+            socket.emit('waitRound', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка).`)
         }
     }
 
@@ -108,10 +109,10 @@ class Game {
             }
         }
         choosenCard.id = choosenCard.owner
-        if (this.currentBlackCard.text) {
+        if (this.currentBlackCard) {
             choosenCard.text = pasteText(this.currentBlackCard.text, choosenCard.text)
+            this.io.emit('addGuessCard', choosenCard);
         } 
-        this.io.emit('addGuessCard', choosenCard);
     }
 
     endRound(winner) {

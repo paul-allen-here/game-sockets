@@ -10,6 +10,9 @@ const gameWrap = document.querySelector('#game-wrap')
 const playersInfo = document.querySelector('#players-info')
 
 const mainCard = document.querySelector('#black-card')
+
+const cardsCover = document.querySelector(`#cover-cards`)
+
 const myCards = document.querySelector('#my-cards')
 const guessCards = document.querySelector('#guess-cards')
 const spinner = document.querySelector('.lds-facebook')
@@ -42,6 +45,8 @@ const showOnly = (whatToShow) => {
     }
 }
 
+showOnly('form')
+
 let socket = io.connect()
 
 let state = {
@@ -56,12 +61,10 @@ let state = {
     clientCards: []
 }
 
-showOnly('form')
-
 btn.addEventListener('click', () => {
     if (name.value.length > 3) {
         socket.emit('setName', { 
-            name: name.value,
+            name: name.value.replace(/ /g,"")
             // room: room.value 
         })
         name.value = ''
@@ -72,10 +75,8 @@ myCards.addEventListener('click', (e) => {
     if (state.choosedCard || state.leading) { 
         return
     }
-    // if (state.choosedCard) { return }
-    
+
     if (!Number(e.target.id)) {
-        console.log("WRONG")
         return
     }
 
@@ -94,14 +95,11 @@ myCards.addEventListener('click', (e) => {
 })
 
 guessCards.addEventListener('click', (e) => {
-    console.log(state.playersInfo)
     if (state.leading) {
         let user = e.target.id
-        console.log(user)
         if (!state.playersInfo.find(player => player.player === user)) {
             return
         }
-        console.log(e.target.text)
         socket.emit('winnerPicked', user)
     }
 })
@@ -113,7 +111,6 @@ socket.on('askOtherName', (msg) => {
 })
 
 socket.on('startRound', (data) => {
-    console.log("start!")
     mainCard.textContent = ""
     guessCards.textContent = ""
     description.textContent = ""
@@ -129,18 +126,21 @@ socket.on('startRound', (data) => {
 
     state.leading = false
     state.leading = data.leading
+
+    cardsCover.style.display = state.leading ? "block" : "none"
     
     drawCards(myCards, state.clientCards)
-    if (state.name) {
-        let h5 = document.createElement("h5")
-        h5.append(`${state.name}`)
-        description.appendChild(h5)
-    }
     for (let player of data.otherPlayersInfo) {
         let trInfo = document.createElement("tr")
+        trInfo.id = `${player.player}-row`
+        if (player.player === state.name) {
+            trInfo.style.background = 'rgb(20, 20, 20)'
+            trInfo.style.color = 'rgb(236, 230, 230)'
+        }
         let tdName = document.createElement("td")
         let tdScore = document.createElement("td")
         let tdLead = document.createElement("td")
+
         tdName.append(`${player.player}`)
         tdScore.append(`${player.score}`)
 
@@ -155,25 +155,19 @@ socket.on('startRound', (data) => {
         trInfo.appendChild(tdLead)
         playersInfo.appendChild(trInfo)
     }
-    console.log(playersInfo)
 })
 
 socket.on('addGuessCard', (card) => {
     state.guessCards.push(card)
     drawCards(guessCards, state.guessCards)
-    console.log(card)
 })
 
 socket.on('endRound', (data) => {
-    let winner = document.createElement("h5")
-    winner.append(`Победитель: ${data.winner}!`)
-    winner.id = "winner"
-    description.append(winner)
-
     let winnerCard = document.querySelector(`#${data.winner}`)
-    console.log(winnerCard)
+    let winnerRow = document.querySelector(`#${data.winner}-row`)
+    winnerRow.style.background = 'green';
     winnerCard.style.background = 'green';
-
+    console.log(data.winner, winnerCard)
     spinner.style.display = 'inline-block'
 })
 
@@ -183,16 +177,12 @@ socket.on('waitRound', (msg) => {
     description.append(msg)
 })
 
-socket.on('count', (counter) => {
-   // console.log(counter)
-})
-
 const drawCards = (elem, cards) => {
     elem.textContent = ""
 
     for (let card of cards) {
-        console.log(card.text)
         let li = document.createElement("li")
+
         li.id = `${ card.id }`
         li.append(card.text)
         elem.append(li)

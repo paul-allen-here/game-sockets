@@ -9,14 +9,17 @@ const parseCards = () => {
     let raw = []
 
     raw = fs.readFileSync('white.txt').toString().split("\n")
+    
     for (let data of raw) {
-        let whiteCard = new WhiteCard(whiteCards.length, data, null)
-        whiteCards.push(whiteCard)
+        if (data.length > 4) {
+            let whiteCard = new WhiteCard(whiteCards.length + 1, data, null)
+            whiteCards.push(whiteCard)
+        }
     }
 
     raw = fs.readFileSync('black.txt').toString().split("\n")
     for (let data of raw) {
-        let blackCard = new BlackCard(blackCards.length, data)
+        let blackCard = new BlackCard(blackCards.length + 1, data)
         blackCards.push(blackCard)
     }
 

@@ -15,4 +15,3 @@ class WhiteCard {
 
 module.exports.BlackCard = BlackCard
 module.exports.WhiteCard = WhiteCard
-
