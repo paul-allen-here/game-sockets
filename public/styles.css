@@ -1,0 +1,157 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    background-color: aliceblue;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    border-radius: 5px;
+}
+
+p {
+    border-radius: 5px;
+}
+
+td {
+    text-align: center;
+}
+
+th {
+    text-align: center;
+}
+
+#black-card {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    background-color: rgb(20, 20, 20);
+    color: rgb(236, 231, 231);
+}
+
+#guess-cards {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+#guess-cards > li {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    background-color: rgb(25, 60, 255);
+    color: rgb(221, 221, 221);
+    transition: all 0.2s ease-out;
+}
+
+#guess-cards > li:hover {
+    background-color: rgb(0, 22, 146);
+}
+
+#guess-cards > li:active {
+    background-color: rgb(0, 16, 105);
+}
+
+#my-cards {
+    vertical-align: middle;
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 500px;
+    list-style-type: none;
+    padding: 10px;
+    
+}
+
+#my-cards > li {
+    flex-wrap: wrap;
+    margin: 5px;
+    padding: 10px;
+    background-color: aliceblue;
+    color: rgb(26, 26, 26);
+    box-shadow: 0px 1px 4px 0px grey;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease-out;
+}
+
+#my-cards > li:hover {
+    background-color: rgb(202, 202, 202);
+}
+
+#my-cards > li:active {
+    background-color: rgb(160, 160, 160);
+}
+
+#form {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#name {
+    flex-grow: 3;
+}
+
+#description {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.app {
+    width: 700px;
+}
+
+.invisible {
+    display: none;
+}
+
+.lds-facebook {
+    margin: auto 0;
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: rgb(36, 36, 36);
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  }
+  .lds-facebook div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+  }
+  .lds-facebook div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+  }
+  .lds-facebook div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+  }
+  @keyframes lds-facebook {
+    0% {
+      top: 8px;
+      height: 64px;
+    }
+    50%, 100% {
+      top: 24px;
+      height: 32px;
+    }
+  }
+  
