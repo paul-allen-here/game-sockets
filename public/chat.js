@@ -50,7 +50,8 @@ let state = {
     leading: false,
     choosedCard: false,
     score: null,
-    
+
+    playersInfo: [],
     guessCards: [],
     clientCards: []
 }
@@ -72,8 +73,14 @@ myCards.addEventListener('click', (e) => {
         return
     }
     // if (state.choosedCard) { return }
-    console.log(state.choosedCard)
+    
+    if (!Number(e.target.id)) {
+        console.log("WRONG")
+        return
+    }
+
     let id = e.target.id
+
     let choosenCard = state.clientCards.filter((card) => {
         if (card.id == id) { return card }
     })[0]
@@ -87,9 +94,13 @@ myCards.addEventListener('click', (e) => {
 })
 
 guessCards.addEventListener('click', (e) => {
-    console.log("Winner picked!")
+    console.log(state.playersInfo)
     if (state.leading) {
         let user = e.target.id
+        console.log(user)
+        if (!state.playersInfo.find(player => player.player === user)) {
+            return
+        }
         console.log(e.target.text)
         socket.emit('winnerPicked', user)
     }
@@ -114,7 +125,8 @@ socket.on('startRound', (data) => {
     state.choosedCard = false
     state.guessCards = []
     state.clientCards = data.whiteCards
-    
+    state.playersInfo = data.otherPlayersInfo
+
     state.leading = false
     state.leading = data.leading
     
@@ -126,12 +138,12 @@ socket.on('startRound', (data) => {
     }
     for (let player of data.otherPlayersInfo) {
         let trInfo = document.createElement("tr")
-
         let tdName = document.createElement("td")
         let tdScore = document.createElement("td")
         let tdLead = document.createElement("td")
         tdName.append(`${player.player}`)
         tdScore.append(`${player.score}`)
+
         if (player.lead === true) {
             tdLead.append(`Ведущий`)
         } else {
@@ -154,9 +166,14 @@ socket.on('addGuessCard', (card) => {
 
 socket.on('endRound', (data) => {
     let winner = document.createElement("h5")
-    winner.append(`Выиграл(a): ${data.winner}!`)
+    winner.append(`Победитель: ${data.winner}!`)
     winner.id = "winner"
     description.append(winner)
+
+    let winnerCard = document.querySelector(`#${data.winner}`)
+    console.log(winnerCard)
+    winnerCard.style.background = 'green';
+
     spinner.style.display = 'inline-block'
 })
 

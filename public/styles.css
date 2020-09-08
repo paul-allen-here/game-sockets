@@ -48,7 +48,7 @@ th {
     margin: 5px;
     padding: 10px;
     background-color: rgb(25, 60, 255);
-    color: rgb(221, 221, 221);
+    color: rgb(220, 220, 220);
     transition: all 0.2s ease-out;
 }
 
@@ -57,21 +57,21 @@ th {
 }
 
 #guess-cards > li:active {
-    background-color: rgb(0, 16, 105);
+    background-color: rgb(0, 15, 100);
 }
 
 #my-cards {
     vertical-align: middle;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     flex-basis: 500px;
     list-style-type: none;
     padding: 10px;
-    
+    transition: all 0.2s ease-out;
 }
 
 #my-cards > li {
-    flex-wrap: wrap;
     margin: 5px;
     padding: 10px;
     background-color: aliceblue;
@@ -112,6 +112,10 @@ th {
     color: rgb(236, 231, 231);
     border-radius: 5px;
     margin: 10px;
+}
+
+.winner-card {
+    background-color: rgb(20, 20, 20) !important;
 }
 
 .container {
