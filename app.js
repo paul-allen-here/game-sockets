@@ -45,8 +45,7 @@ io.on('connection', socket => {
         game.endRound(winner)
         setTimeout(() => {
             game.startNewRound()
-        }, 2500)
-        
+        }, 2300)
     })
 
     socket.on('disconnect', () => {

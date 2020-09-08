@@ -61,7 +61,7 @@ btn.addEventListener('click', () => {
     if (name.value.length > 3) {
         socket.emit('setName', { 
             name: name.value,
-            room: room.value 
+            // room: room.value 
         })
         name.value = ''
     }
@@ -155,6 +155,7 @@ socket.on('addGuessCard', (card) => {
 socket.on('endRound', (data) => {
     let winner = document.createElement("h5")
     winner.append(`Выиграл(a): ${data.winner}!`)
+    winner.id = "winner"
     description.append(winner)
     spinner.style.display = 'inline-block'
 })

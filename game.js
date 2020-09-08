@@ -10,6 +10,7 @@ class Game {
     sockets = []
     playersToStart = 2
     leadIndex = 0
+    numberOfCardsOnHand = 5
 
     setNewPlayer(socket, data) {
         if (this.sockets.some(socket => socket.username === data.name)) {
@@ -56,9 +57,9 @@ class Game {
 
     getUserStarted(socket, blackCard) {
         if (!socket.whiteCards) {
-            socket.whiteCards = shuffleCards(this.whiteCards).slice(0, 5)
+            socket.whiteCards = shuffleCards(this.whiteCards).slice(0, this.numberOfCardsOnHand)
         } else {
-            if (socket.whiteCards.length < 5) {
+            if (socket.whiteCards.length < this.numberOfCardsOnHand) {
                 socket.whiteCards.push(shuffleCards(this.whiteCards)[0])
             }
         }
@@ -124,6 +125,9 @@ class Game {
             winner: winner
         })
         this.leadIndex++
+        if (this.sockets.length - 1 < this.leadIndex) {
+            this.leadIndex = 0
+        }
     }
 }
 
@@ -137,12 +141,10 @@ const shuffleCards = (cards) => {
 
 const pasteText = (blackCard, whiteCard) => {
     let result = blackCard.replace(/____/i, whiteCard)
-    result = result[0].toUpperCase() + result.slice(1)
-    result.replace(/((?:^|[.?!])+\s*)(.)/g, (m, tail, ch) => {
-        return tail + ch.toUpperCase()
+    result = result.replace(/(^|[\.\?\!]\s+)(.)/g, function(a, b, c){
+        return b + c.toUpperCase();
     })
     return result
-
 }
 
 module.exports.Game = Game

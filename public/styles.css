@@ -17,6 +17,7 @@ p {
 }
 
 td {
+    transition: all 0.2s ease-out;
     text-align: center;
 }
 
@@ -100,8 +101,17 @@ th {
 }
 
 #description {
+    transition: all 0.2s ease-out;
     display: flex;
     justify-content: space-between;
+    height: 68px;
+}
+
+#winner {
+    background-color: rgb(20, 20, 20);
+    color: rgb(236, 231, 231);
+    border-radius: 5px;
+    margin: 10px;
 }
 
 .container {
