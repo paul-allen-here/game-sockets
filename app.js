@@ -14,9 +14,10 @@ app.use(express.static("public"))
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html')
 })
-let port = 3000
-server = app.listen(port, () => {
-    console.log("Server is up... on " + port)
+
+const PORT = process.env.PORT || 5000
+server = app.listen(PORT, () => {
+    console.log("Server is up... on " + PORT)
 })
 
 const io = require('socket.io')(server)
