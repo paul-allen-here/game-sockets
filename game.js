@@ -10,7 +10,7 @@ class Game {
     sockets = []
     playersToStart = 2
     leadIndex = 0
-    numberOfCardsOnHand = 5
+    numberOfCardsOnHand = 8
 
     setNewPlayer(socket, data) {
         if (this.sockets.some(socket => socket.username === data.name)) {
