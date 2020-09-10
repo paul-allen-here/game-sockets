@@ -75,7 +75,7 @@ th {
 #stiky-container {
     position: sticky;
     bottom: 0;
-    background: linear-gradient(0deg, aliceblue, aliceblue, aliceblue, transparent);
+    background: linear-gradient(0deg, aliceblue, aliceblue, transparent);
 }
 
 #cards-container {
@@ -86,7 +86,8 @@ th {
 }
 
 #cover-cards {
-    background: linear-gradient(180deg, black, transparent);
+    background: linear-gradient(180deg, rgb(20, 20, 20), transparent);
+    text-shadow: 1px 1px 2px rgb(20, 20, 20);
     box-sizing: border-box;
     position: absolute;
     text-align: center;
