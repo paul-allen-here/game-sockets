@@ -38,13 +38,16 @@ th {
 #black-card {
     display: flex;
     flex-direction: row;
+    margin: 0 10px;
     padding: 10px;
     border-radius: 5px;
     background-color: rgb(20, 20, 20);
     color: rgb(236, 230, 230);
+    margin-bottom: 1rem;
 }
 
 #guess-cards {
+    margin: 0 10px;
     display: flex;
     flex-direction: column;
 }
@@ -56,6 +59,7 @@ th {
     background-color: rgb(25, 60, 255);
     color: rgb(220, 220, 220);
     transition: all 0.3s ease-out;
+    margin-bottom: 1rem;
 }
 
 #guess-cards > li:hover {
@@ -123,7 +127,7 @@ th {
 
 #form {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     gap: 10px;
 }
 
@@ -146,11 +150,18 @@ th {
 }
 
 .app {
+    margin: 1rem;
     width: 700px;
 }
 
 .invisible {
     display: none;
+}
+
+@media (max-width: 550px) and (min-width: 100px) {
+    .container {
+        width: 100%;
+    }
 }
 
 .lds-facebook {

@@ -15,7 +15,6 @@ const cardsCover = document.querySelector(`#cover-cards`)
 
 const myCards = document.querySelector('#my-cards')
 const guessCards = document.querySelector('#guess-cards')
-const spinner = document.querySelector('.lds-facebook')
 
 const showOnly = (whatToShow) => {
     switch (whatToShow) {
@@ -24,21 +23,18 @@ const showOnly = (whatToShow) => {
             gameWrap.classList.remove("invisible")
             mainCard.classList.remove("invisible")
             form.classList.add("invisible")
-            spinner.style.display = 'none'
             break
         case 'form':
             description.classList.remove("invisible")
             gameWrap.classList.add("invisible")
             mainCard.classList.add("invisible")
             form.classList.remove("invisible")
-            spinner.style.display = 'none'
             break
         case 'loading':
             description.classList.remove("invisible")
             gameWrap.classList.add("invisible")
             mainCard.classList.add("invisible")
             form.classList.add("invisible")
-            spinner.style.display = 'inline-block'
             break
         default:
             break

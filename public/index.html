@@ -9,11 +9,14 @@
 </head>
 <body>
     <section class="container">
+
         <div class="app">
+
             <h1>Angry cards!</h1>
             <div id="description">
                 <h5>Game by Vladimir</h5>
             </div>
+
             <div id="form-container">
                 <div id="form">
                     <input id='name' type="text" placeholder="Your name">
@@ -21,7 +24,9 @@
                     <button id="btn">JOIN</button>
                 </div>
             </div>
+
             <div id = "game-wrap">
+
                 <table id="players-table" class="u-full-width">
                     <thead>
                         <tr>
@@ -38,23 +43,21 @@
                         </tr>
                     </tbody>
                 </table>
+
                 <ul id="black-card"></ul>
                 <ul id="guess-cards"></ul>
+
                 <div id="stiky-container">
                     <div id='cards-container'>
                         <div id="cover-cards"><h1>ВЫ ВЕДУЩИЙ!</h1></div>
                         <ul id="my-cards"></ul>
                     </div>
                 </div>
+
             </div>
-            <div class="container">
-                <div class="lds-facebook">
-                    <!-- <div></div>
-                    <div></div>
-                    <div></div> -->
-                </div>
-            </div>
+
         </div>
+        
     </section>
 </body>
     <script src="/socket.io/socket.io.js"></script>
