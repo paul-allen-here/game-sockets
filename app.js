@@ -49,14 +49,17 @@ io.on('connection', socket => {
     })
 
     socket.on('disconnect', () => {
+        
         if (game && game.sockets) {
+            if (Array.isArray(socket.whiteCards) === true) {
+                game.whiteCards = [...game.whiteCards, ...socket.whiteCards]
+            }
             game.sockets = game.sockets.filter((connection) => {
                 if (connection.id !== socket.id) {
                     return connection
                 }
             })
             if (game.sockets.length < 2) {
-                console.log(game.sockets.length)
                 game.showWaittingMessage()
             }
         }

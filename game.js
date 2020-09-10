@@ -1,6 +1,5 @@
 class Game {
     constructor(io, blackCards, whiteCards) {
-        // this.id = id
         this.io = io
         this.blackCards = blackCards
         this.whiteCards = whiteCards
@@ -18,11 +17,10 @@ class Game {
             this.askForOtherName(socket)
             return
         }
-        console.log(`New player setted! ${data.name}`)
+        console.log(`New player ${data.name}`)
         socket.username = data.name
         socket.score = 0
         this.sockets.push(socket)
-        console.log(this.sockets.length)
         
         if (this.sockets.length >= this.playersToStart) {
             console.log("All Players setted!")
@@ -41,7 +39,7 @@ class Game {
     }
 
     showWaittingMessage() {
-        console.log("Ожидаем!")
+        console.log("Waiting!")
         for (let socket of this.sockets) {
             socket.score = 0
             socket.emit('waitRound', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка).`)
@@ -56,14 +54,21 @@ class Game {
         }
     }
 
-    getUserStarted(socket, blackCard) {
-        if (!socket.whiteCards) {
-            socket.whiteCards = shuffleCards(this.whiteCards).slice(0, this.numberOfCardsOnHand)
-        } else {
-            if (socket.whiteCards.length < this.numberOfCardsOnHand) {
-                socket.whiteCards.push(shuffleCards(this.whiteCards)[0])
-            }
+    setUserHand(socket) {
+        while (socket.whiteCards.length < this.numberOfCardsOnHand) {
+            socket.whiteCards.push(shuffleCards(this.whiteCards).pop())
         }
+    }
+    
+    getUserStarted(socket, blackCard) {
+        console.log(this.whiteCards.length)
+        if (!socket.whiteCards) {
+            socket.whiteCards = []
+            this.setUserHand(socket)
+        } else {
+            this.setUserHand(socket)
+        }
+        console.log(this.whiteCards.length)
         socket.whiteCards = socket.whiteCards.map(el => {
             el.owner = socket.username
             return el
@@ -89,7 +94,6 @@ class Game {
             blackCard: blackCard,
             whiteCards: socket.whiteCards
         }
-        console.log(userData)
         this.io.to(socket.id).emit("startRound", userData)
     }
 
@@ -99,6 +103,7 @@ class Game {
     }
 
     chooseCard(id, choosenCard) {
+        console.log(choosenCard)
         for (let socket of this.sockets) {
             if (socket.id === id) {
                 socket.whiteCards = socket.whiteCards.filter((card) => {
@@ -108,11 +113,16 @@ class Game {
                 })
             }
         }
-        choosenCard.id = choosenCard.owner
+        let blueCard = {...choosenCard}
+        blueCard.id = choosenCard.owner
+        choosenCard.owner = null
+        console.log(this.whiteCards.length)
+        this.whiteCards.push(choosenCard)
         if (this.currentBlackCard) {
-            choosenCard.text = pasteText(this.currentBlackCard.text, choosenCard.text)
-            this.io.emit('addGuessCard', choosenCard);
-        } 
+            blueCard.text = pasteText(this.currentBlackCard.text, blueCard.text)
+            this.io.emit('addGuessCard', blueCard)
+        }
+        console.log(this.whiteCards.length)
     }
 
     endRound(winner) {
@@ -142,7 +152,7 @@ const shuffleCards = (cards) => {
 
 const pasteText = (blackCard, whiteCard) => {
     let result = blackCard.replace(/____/i, whiteCard)
-    result = result.replace(/(^|[\.\?\!]\s+)(.)/g, function(a, b, c){
+    result = result.replace(/(^|[\.\?\!]\s+)(.)/g, (a, b, c) => {
         return b + c.toUpperCase();
     })
     return result
