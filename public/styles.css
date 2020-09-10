@@ -4,6 +4,8 @@ body {
     background-color: aliceblue;
     padding: 0;
     margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 ul {
@@ -43,7 +45,7 @@ th {
     border-radius: 5px;
     background-color: rgb(20, 20, 20);
     color: rgb(236, 230, 230);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 #guess-cards {
@@ -59,7 +61,7 @@ th {
     background-color: rgb(25, 60, 255);
     color: rgb(220, 220, 220);
     transition: all 0.3s ease-out;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 #guess-cards > li:hover {
@@ -158,7 +160,7 @@ th {
     display: none;
 }
 
-@media (max-width: 550px) and (min-width: 100px) {
+@media (max-width: 600px) and (min-width: 100px) {
     .container {
         width: 100%;
     }
