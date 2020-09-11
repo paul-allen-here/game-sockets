@@ -24,15 +24,7 @@ const io = require('socket.io')(server)
 
 const games = []
 
-//  socket.join('game 237', () => {
-//      let games = Object.keys(socket.games);
-//      io.to(socket.id).emit("wait", stateOfgame.sockets)
-//      console.log(games); // [ <socket.id>, 'game 237' ]
-//  });
-
 io.on('connection', socket => {
-    console.log(`New user with id: ${socket.id} connected`)
-    
     socket.on('setName', data => {
         const game = games.find((game) => (game.id === data.room))
 
@@ -51,12 +43,10 @@ io.on('connection', socket => {
     })
 
     socket.on('choose', (choosenCard) => {
-        console.log(socket.rooms)
         const game = games.find((game) => {
             return game.id === socket.rooms
         })
-        if (game) { 
-            console.log(choosenCard)
+        if (game) {
             game.chooseCard(socket.id, choosenCard) 
         }
     })
@@ -90,17 +80,3 @@ io.on('connection', socket => {
         }
     })
 })
-
-// tempWhiteCards = tempWhiteCards.filter((card) => {
-//     for (let tempCard of razdacha) {
-//         if (card.id != tempCard.id) {
-//             return(card)
-//         }
-//     }
-// })
-
-// tempBlackCards = tempBlackCards.filter((card) => {
-//     if (card.id != blackCard.id) {
-//         return(card)
-//     }
-// })

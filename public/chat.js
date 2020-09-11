@@ -66,7 +66,7 @@ btn.addEventListener('click', () => {
     if (name.value.length > 3 && room.value.length > 3) {
         socket.emit('setName', { 
             name: name.value.replace(/ /g,""),
-            room: room.value 
+            room: room.value.replace(/ /g,""),
         })
         name.value = ''
         room.value = ''
@@ -183,7 +183,6 @@ const drawCards = (elem, cards) => {
 
     for (let card of cards) {
         let li = document.createElement("li")
-
         li.id = `${ card.id }`
         li.append(card.text)
         elem.append(li)
