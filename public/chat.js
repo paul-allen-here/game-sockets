@@ -41,6 +41,11 @@ const showOnly = (whatToShow) => {
     }
 }
 
+// let counter = 0;
+// setInterval(() => {
+//     socket.emit('count', ++counter);
+// }, 1000);
+
 showOnly('form')
 
 let socket = io.connect()
@@ -58,12 +63,13 @@ let state = {
 }
 
 btn.addEventListener('click', () => {
-    if (name.value.length > 3) {
+    if (name.value.length > 3 && room.value.length > 3) {
         socket.emit('setName', { 
-            name: name.value.replace(/ /g,"")
-            // room: room.value 
+            name: name.value.replace(/ /g,""),
+            room: room.value 
         })
         name.value = ''
+        room.value = ''
     }
 })
 
@@ -164,7 +170,6 @@ socket.on('endRound', (data) => {
     winnerRow.style.background = 'green';
     winnerCard.style.background = 'green';
     console.log(data.winner, winnerCard)
-    spinner.style.display = 'inline-block'
 })
 
 socket.on('waitRound', (msg) => {

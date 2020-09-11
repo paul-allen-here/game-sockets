@@ -1,5 +1,6 @@
 class Game {
-    constructor(io, blackCards, whiteCards) {
+    constructor(id, io, blackCards, whiteCards) {
+        this.id = id
         this.io = io
         this.blackCards = blackCards
         this.whiteCards = whiteCards
@@ -17,7 +18,12 @@ class Game {
             this.askForOtherName(socket)
             return
         }
-        console.log(`New player ${data.name}`)
+
+        let room = data.room
+        socket.join(room)
+        socket.rooms = room
+
+        console.log(`New player ${data.name}, room ${socket.rooms}`)
         socket.username = data.name
         socket.score = 0
         this.sockets.push(socket)
@@ -25,24 +31,20 @@ class Game {
         if (this.sockets.length >= this.playersToStart) {
             console.log("All Players setted!")
             this.startNewRound()
-            // let counter = 0;
-            // setInterval(() => {
-            //     socket.emit('count', ++counter);
-            // }, 1000);
         } else {
             this.showWaittingMessage()
         }
     }
 
     askForOtherName(socket) {
-        socket.emit('askOtherName', `Это имя уже занято!`)
+        this.io.to(socket.id).emit('askOtherName', `Это имя уже занято!`)
     }
 
     showWaittingMessage() {
         console.log("Waiting!")
         for (let socket of this.sockets) {
             socket.score = 0
-            socket.emit('waitRound', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка).`)
+            this.io.to(socket.id).emit('waitRound', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка.`)
         }
     }
 
@@ -120,7 +122,7 @@ class Game {
         this.whiteCards.push(choosenCard)
         if (this.currentBlackCard) {
             blueCard.text = pasteText(this.currentBlackCard.text, blueCard.text)
-            this.io.emit('addGuessCard', blueCard)
+            this.io.sockets.to(this.id).emit('addGuessCard', blueCard)
         }
         console.log(this.whiteCards.length)
     }
@@ -132,7 +134,7 @@ class Game {
             }
             return socket
         })
-        this.io.emit('endRound', { 
+        this.io.sockets.to(this.id).emit('endRound', { 
             winner: winner
         })
         this.leadIndex++

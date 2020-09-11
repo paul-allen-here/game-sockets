@@ -22,34 +22,59 @@ server = app.listen(PORT, () => {
 
 const io = require('socket.io')(server)
 
-let game = new Game(io, tempBlackCards, tempWhiteCards)
+const games = []
 
 //  socket.join('game 237', () => {
 //      let games = Object.keys(socket.games);
 //      io.to(socket.id).emit("wait", stateOfgame.sockets)
 //      console.log(games); // [ <socket.id>, 'game 237' ]
-//  });    
+//  });
 
 io.on('connection', socket => {
     console.log(`New user with id: ${socket.id} connected`)
-
+    
     socket.on('setName', data => {
-        game.setNewPlayer(socket, data)
+        const game = games.find((game) => (game.id === data.room))
+
+        if (game) {
+            game.setNewPlayer(socket, data)
+        } else {
+            let game = new Game(
+                data.room,
+                io,
+                JSON.parse(JSON.stringify(tempBlackCards)),
+                JSON.parse(JSON.stringify(tempWhiteCards))
+            )
+            games.push(game)
+            game.setNewPlayer(socket, data)
+        }
     })
 
     socket.on('choose', (choosenCard) => {
-        game.chooseCard(socket.id, choosenCard)
+        console.log(socket.rooms)
+        const game = games.find((game) => {
+            return game.id === socket.rooms
+        })
+        if (game) { 
+            console.log(choosenCard)
+            game.chooseCard(socket.id, choosenCard) 
+        }
     })
 
     socket.on('winnerPicked', (winner) => {
-        game.endRound(winner)
-        setTimeout(() => {
-            game.startNewRound()
-        }, 2300)
+        const game = games.find((game) => {
+            return game.id === socket.rooms
+        })
+        if (game) {
+            game.endRound(winner)
+            setTimeout(() => { game.startNewRound() }, 2300)
+        }
     })
 
     socket.on('disconnect', () => {
-        
+        const game = games.find((game) => {
+            return game.id === socket.rooms
+        })
         if (game && game.sockets) {
             if (Array.isArray(socket.whiteCards) === true) {
                 game.whiteCards = [...game.whiteCards, ...socket.whiteCards]
