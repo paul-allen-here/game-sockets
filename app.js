@@ -1,8 +1,8 @@
 const express = require("express")
 const app = express()
 
-const { Game } = require('./game')
-const { parseCards } = require('./cardParser')
+const { Game } = require('./models/game')
+const { parseCards } = require('./utils/cardParser')
 
 const cardsForGame = parseCards()
 

@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const { BlackCard, WhiteCard } = require('./cards')
+const { BlackCard, WhiteCard } = require('../models/cards')
 
 const blackCards = []
 const whiteCards = []
