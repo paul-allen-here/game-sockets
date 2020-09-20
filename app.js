@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
 })
 
 const PORT = process.env.PORT || 5000
+
 server = app.listen(PORT, () => {
     console.log("Server is up... on " + PORT)
 })
@@ -25,7 +26,7 @@ const io = require('socket.io')(server)
 const games = []
 
 io.on('connection', socket => {
-    socket.on('setName', data => {
+    socket.on('JOIN', data => {
         const game = games.find((game) => (game.id === data.room))
 
         if (game) {
@@ -42,7 +43,7 @@ io.on('connection', socket => {
         }
     })
 
-    socket.on('choose', (choosenCard) => {
+    socket.on('CHOOSE', (choosenCard) => {
         const game = games.find((game) => {
             return game.id === socket.rooms
         })
@@ -51,7 +52,7 @@ io.on('connection', socket => {
         }
     })
 
-    socket.on('winnerPicked', (winner) => {
+    socket.on('WINNER_PICKED', (winner) => {
         const game = games.find((game) => {
             return game.id === socket.rooms
         })

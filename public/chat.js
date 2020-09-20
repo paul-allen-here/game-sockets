@@ -41,11 +41,6 @@ const showOnly = (whatToShow) => {
     }
 }
 
-// let counter = 0;
-// setInterval(() => {
-//     socket.emit('count', ++counter);
-// }, 1000);
-
 showOnly('form')
 
 let socket = io.connect()
@@ -64,7 +59,7 @@ let state = {
 
 btn.addEventListener('click', () => {
     if (name.value.length > 3 && room.value.length > 3) {
-        socket.emit('setName', { 
+        socket.emit('SET_NAME', { 
             name: name.value.replace(/ /g,""),
             room: room.value.replace(/ /g,""),
         })
@@ -93,7 +88,7 @@ myCards.addEventListener('click', (e) => {
     })
     state.choosedCard = true
     drawCards(myCards, state.clientCards)
-    socket.emit('choose', choosenCard)
+    socket.emit('CHOOSE', choosenCard)
 })
 
 guessCards.addEventListener('click', (e) => {
@@ -102,17 +97,17 @@ guessCards.addEventListener('click', (e) => {
         if (!state.playersInfo.find(player => player.player === user)) {
             return
         }
-        socket.emit('winnerPicked', user)
+        socket.emit('WINNER_PICKED', user)
     }
 })
 
-socket.on('askOtherName', (msg) => {
+socket.on('ERROR_NAME', (msg) => {
     showOnly('form')
     description.textContent = ""
     description.append(msg)
 })
 
-socket.on('startRound', (data) => {
+socket.on('START_ROUND', (data) => {
     mainCard.textContent = ""
     guessCards.textContent = ""
     description.textContent = ""
@@ -159,12 +154,12 @@ socket.on('startRound', (data) => {
     }
 })
 
-socket.on('addGuessCard', (card) => {
+socket.on('ADD_GUESS_CARD', (card) => {
     state.guessCards.push(card)
     drawCards(guessCards, state.guessCards)
 })
 
-socket.on('endRound', (data) => {
+socket.on('END_ROUND', (data) => {
     let winnerCard = document.querySelector(`#${data.winner}`)
     let winnerRow = document.querySelector(`#${data.winner}-row`)
     winnerRow.style.background = 'green';
@@ -172,7 +167,7 @@ socket.on('endRound', (data) => {
     console.log(data.winner, winnerCard)
 })
 
-socket.on('waitRound', (msg) => {
+socket.on('WAIT_FOR_GAME', (msg) => {
     showOnly('loading')
     description.textContent = ""
     description.append(msg)
@@ -188,3 +183,8 @@ const drawCards = (elem, cards) => {
         elem.append(li)
     }
 }
+
+// let counter = 0;
+// setInterval(() => {
+//     socket.emit('count', ++counter);
+// }, 1000);

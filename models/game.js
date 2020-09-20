@@ -37,14 +37,14 @@ class Game {
     }
 
     askForOtherName(socket) {
-        this.io.to(socket.id).emit('askOtherName', `Это имя уже занято!`)
+        this.io.to(socket.id).emit('ERROR_NAME', `Это имя уже занято!`)
     }
 
     showWaittingMessage() {
         console.log("Waiting!")
         for (let socket of this.sockets) {
             socket.score = 0
-            this.io.to(socket.id).emit('waitRound', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка.`)
+            this.io.to(socket.id).emit('WAIT_FOR_GAME', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка.`)
         }
     }
 
@@ -92,11 +92,12 @@ class Game {
         let userData = {
             otherPlayersInfo,
             username: socket.username,
+            room: socket.rooms,
             leading: this.checkLeadingSocket(socket),
             blackCard: blackCard,
             whiteCards: socket.whiteCards
         }
-        this.io.to(socket.id).emit("startRound", userData)
+        this.io.to(socket.id).emit("START_ROUND", userData)
     }
 
     checkLeadingSocket(socket) {
@@ -115,14 +116,14 @@ class Game {
                 })
             }
         }
-        let blueCard = {...choosenCard}
+        let blueCard = { ...choosenCard }
         blueCard.id = choosenCard.owner
         choosenCard.owner = null
         console.log(this.whiteCards.length)
         this.whiteCards.push(choosenCard)
         if (this.currentBlackCard) {
             blueCard.text = pasteText(this.currentBlackCard.text, blueCard.text)
-            this.io.sockets.to(this.id).emit('addGuessCard', blueCard)
+            this.io.sockets.to(this.id).emit('ADD_GUESS_CARD', blueCard)
         }
         console.log(this.whiteCards.length)
     }
@@ -134,7 +135,7 @@ class Game {
             }
             return socket
         })
-        this.io.sockets.to(this.id).emit('endRound', { 
+        this.io.sockets.to(this.id).emit('END_ROUND', { 
             winner: winner
         })
         this.leadIndex++
@@ -147,15 +148,15 @@ class Game {
 const shuffleCards = (cards) => {
     for (let i = cards.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[j]] = [cards[j], cards[i]];
+        [cards[i], cards[j]] = [cards[j], cards[i]]
     }
-    return cards;
+    return cards
 }
 
 const pasteText = (blackCard, whiteCard) => {
     let result = blackCard.replace(/____/i, whiteCard)
     result = result.replace(/(^|[\.\?\!]\s+)(.)/g, (a, b, c) => {
-        return b + c.toUpperCase();
+        return b + c.toUpperCase()
     })
     return result
 }
