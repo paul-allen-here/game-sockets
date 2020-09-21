@@ -15,7 +15,7 @@ let initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         
-        case 'START_ROUND':
+        case 'FILL_GAMEBOARD':
             return {
                 ...state,
                 name: action.payload.username,
