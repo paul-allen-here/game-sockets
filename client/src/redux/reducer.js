@@ -15,7 +15,7 @@ let initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         
-        case 'FILL_GAMEBOARD':
+        case 'START_ROUND':
             return {
                 ...state,
                 name: action.payload.username,
@@ -31,7 +31,7 @@ const reducer = (state = initialState, action) => {
             }
         break
 
-        case 'WAITTING':
+        case 'WAIT_FOR_GAME':
             return {
                 ...state,
                 awaitMessage: action.payload

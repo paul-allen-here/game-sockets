@@ -10,32 +10,14 @@ const middleware = store => next => action => {
             socket = io(ENDPOINT)
             console.log(`Connected to ${ENDPOINT}`)
 
-            // Attach the callbacks
-
             socket.on('ERROR_NAME', msg => {
                 console.log(msg)
             })
 
-            socket.on('WAIT_FOR_GAME', data => {
-                store.dispatch({ type: 'WAITTING', payload: data })
+            // Attach the callbacks
+            socket.on(ev, data => {
+                store.dispatch({ type: ev, payload: data })
             })
-
-            socket.on('START_ROUND', data => {
-                store.dispatch({ type: 'FILL_GAMEBOARD', payload: data })
-            })
-
-            socket.on('ADD_GUESS_CARD', data => {
-                store.dispatch({ type: 'ADD_GUESS_CARD', payload: data })
-            })
-
-            socket.on('END_ROUND', data => {
-                store.dispatch({ type: 'SHOW_WINNER', payload: data })
-            })
-
-            socket.on('message', message => {
-                store.dispatch({ type: 'MESSAGE', payload: message })
-            })
-            break
 
         case 'JOIN':
             socket.emit('JOIN', action.payload)
