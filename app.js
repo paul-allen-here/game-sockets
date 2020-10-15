@@ -23,7 +23,7 @@ server = app.listen(PORT, () => {
 
 const io = require('socket.io')(server)
 
-const games = []
+let games = []
 
 io.on('connection', socket => {
     socket.on('JOIN', data => {
@@ -63,21 +63,27 @@ io.on('connection', socket => {
     })
 
     socket.on('disconnect', () => {
-        const game = games.find((game) => {
-            return game.id === socket.rooms
-        })
-        if (game && game.sockets) {
-            if (Array.isArray(socket.whiteCards) === true) {
-                game.whiteCards = [...game.whiteCards, ...socket.whiteCards]
-            }
-            game.sockets = game.sockets.filter((connection) => {
-                if (connection.id !== socket.id) {
-                    return connection
+        console.log(`${socket.id} disconnected`)
+        games.forEach((game) => {
+            socket = game.sockets.find((connection) => (socket.id === connection.id))
+            if (socket) {
+                console.log(game)
+                if (Array.isArray(socket.whiteCards) === true) {
+                    game.whiteCards = [...game.whiteCards, ...socket.whiteCards]
                 }
-            })
-            if (game.sockets.length < 2) {
-                game.showWaittingMessage()
+                game.sockets = game.sockets.filter((connection) => {
+                    if (connection.id !== socket.id) {
+                        return connection
+                    }
+                })
+                if (game.sockets.length < 2) {
+                    game.showWaittingMessage()
+                }
+                if (game.sockets.length === 0) {
+                    games = games.filter((current) => current !== game);
+                }
+                console.log(games)
             }
-        }
+        })
     })
 })

@@ -7,10 +7,9 @@ let socket
 const middleware = store => next => action => {
     switch (action.type) {
         case 'CONNECT':
-            socket = io(ENDPOINT)
-            console.log(`Connected to ${ENDPOINT}`)
+            socket = process.env.NODE_ENV === 'development' ? io(ENDPOINT) : io()
 
-            // Attach the callbacks
+            // Attach the callbacks on socket events
 
             socket.on('ERROR_NAME', msg => {
                 console.log(msg)
@@ -36,17 +35,17 @@ const middleware = store => next => action => {
                 store.dispatch({ type: 'MESSAGE', payload: message })
             })
             break
-
+        // Player joined the room
         case 'JOIN':
             socket.emit('JOIN', action.payload)
             break
-        
+        // Player choose card from hand to play
         case 'CHOOSE':
             store.dispatch({ type: 'SET_CHOOSEN_CARD' })
             socket.emit('CHOOSE', action.payload)
             store.dispatch({ type: 'DELETE_CHOOSEN_CARD', payload: action.payload })
             break
-
+        // Judge picked winner's card
         case 'WINNER_PICKED':
             console.log(action.payload)
             store.dispatch({ type: 'SET_CHOOSEN_CARD' })
