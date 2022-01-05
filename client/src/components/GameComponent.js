@@ -5,15 +5,14 @@ import BlackCard from '../containers/BlackCard'
 import UserHand from './UserHand'
 import GuessCards from './GuessCards'
 
-const GameComponent = props => {
-	const { 
-		name,
-		winner,
-		blackCard,
-		guessCards,
-		playersInfo 
-	} = props
-
+const GameComponent = ({
+	room,
+	name,
+	winner,
+	blackCard,
+	guessCards,
+	playersInfo 
+}) => {
 	return (
 		<div>
 			<PlayerTable 
@@ -24,7 +23,6 @@ const GameComponent = props => {
 			<BlackCard blackCard = { blackCard }/>
 			<GuessCards hand = { guessCards }/>
 			<UserHand />
-			{/* { BufferForMyCards } */}
 		</div>
 	)
 }

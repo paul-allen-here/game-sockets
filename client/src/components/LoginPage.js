@@ -1,10 +1,13 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { join } from '../redux/actions'
+import qs from 'qs'
 
 const LoginPage = ({ join }) => {
-  const [name, setName] = useState("")
-	const [room, setRoom] = useState("")
+	const queryParams = qs.parse(window.location.search, {ignoreQueryPrefix: true})
+	
+  	const [name, setName] = useState("")
+	const [room, setRoom] = useState(queryParams.room || "")
 
 	const handleJoinClick = () => {
 		join({ 
@@ -38,7 +41,7 @@ const LoginPage = ({ join }) => {
         onChange={(e) => setName(e.target.value.replace(/ /g,""))}
         placeholder="Your name"
       />
-      { showRoomInput(window.location.search) }
+      { showRoomInput(queryParams.room) }
       <button id="joinBtn" onClick={(e) => { handleJoinClick() }}>JOIN</button>
     </div>
   )

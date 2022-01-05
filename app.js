@@ -58,14 +58,14 @@ io.on('connection', socket => {
         })
         if (game) {
             game.endRound(winner)
-            setTimeout(() => { game.startNewRound() }, 2300)
+            setTimeout(() => { game.startNewRound() }, 2500)
         }
     })
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} disconnected`)
         games.forEach((game) => {
-            socket = game.sockets.find((connection) => (socket.id === connection.id))
+            socket = game.sockets.find((connection) => (socket?.id === connection?.id))
             if (socket) {
                 console.log(game)
                 if (Array.isArray(socket.whiteCards) === true) {

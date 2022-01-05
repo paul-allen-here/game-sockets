@@ -7,6 +7,7 @@ class Game {
     }
     
     currentBlackCard = null
+    discardedBlackCards = []
     guessCards = null
     sockets = []
     playersToStart = 2
@@ -32,7 +33,7 @@ class Game {
             console.log("All Players setted!")
             this.startNewRound()
         } else {
-            this.showWaittingMessage()
+            this.showWaittingMessage(room)
         }
     }
 
@@ -40,16 +41,26 @@ class Game {
         this.io.to(socket.id).emit('ERROR_NAME', `Это имя уже занято!`)
     }
 
-    showWaittingMessage() {
+    showWaittingMessage(room = undefined) {
         console.log("Waiting!")
         for (let socket of this.sockets) {
             socket.score = 0
-            this.io.to(socket.id).emit('WAIT_FOR_GAME', `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка.`)
+            this.io.to(socket.id).emit(
+                'WAIT_FOR_GAME', 
+                {
+                    awaitMessage: `Ждем подключения еще ${this.playersToStart - this.sockets.length} игроков/ка.`,
+                    room: room,
+                }
+            )
         }
     }
 
     startNewRound() {
         console.log("Game Starts!")
+        if (this.blackCards.length < 2) {
+            this.blackCards = [...this.blackCards, ...this.discardedBlackCards];
+            this.discardedBlackCards = [];
+        }
         this.currentBlackCard = shuffleCards(this.blackCards)[0]
         for (let socket of this.sockets) {
             this.getUserStarted(socket, this.currentBlackCard)
@@ -142,6 +153,9 @@ class Game {
         if (this.sockets.length - 1 < this.leadIndex) {
             this.leadIndex = 0
         }
+        this.discardedBlackCards.push(this.currentBlackCard);
+        this.blackCards = this.blackCards.filter(card => this.currentBlackCard.id !== card.id);
+        console.log(this.blackCards.length, "discarded", this.discardedBlackCards)
     }
 }
 

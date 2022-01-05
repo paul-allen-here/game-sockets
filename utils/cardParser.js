@@ -1,28 +1,12 @@
-const fs = require('fs')
-
 const { BlackCard, WhiteCard } = require('../models/cards')
-
-const blackCards = []
-const whiteCards = []
+const blackCardsRaw = require('../resources/black.json');
+const whiteCardsRaw = require('../resources/white.json');
 
 const parseCards = () => {
-    let raw = []
+    const whiteCards = whiteCardsRaw.whiteCards.map((rawCard, index) => new WhiteCard(index + 1, rawCard, null))
 
-    raw = fs.readFileSync('./resources/white.txt').toString().split("\n")
-
-    for (let data of raw) {
-        if (data.length > 4) {
-            let whiteCard = new WhiteCard(whiteCards.length + 1, data, null)
-            whiteCards.push(whiteCard)
-        }
-    }
-
-    raw = fs.readFileSync('./resources/black.txt').toString().split("\n")
-    for (let data of raw) {
-        let blackCard = new BlackCard(blackCards.length + 1, data)
-        blackCards.push(blackCard)
-    }
-
+    const blackCards = blackCardsRaw.blackCards.map((rawCard, index) => new BlackCard(index + 1, rawCard))
+    console.log(blackCards, whiteCards);
     return {whiteCards, blackCards}
 }
 

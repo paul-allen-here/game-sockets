@@ -12,34 +12,35 @@ let initialState = {
     clientCards: []
 }
 
-const reducer = (state = initialState, action) => {
-    switch (action.type) {
+const reducer = (state = initialState, {type, payload} = {}) => {
+    switch (type) {
         
         case 'FILL_GAMEBOARD':
             return {
                 ...state,
-                name: action.payload.username,
-                room: action.payload.room,
-                leading: action.payload.leading,
-                blackCard: action.payload.blackCard,
-                whiteCards: action.payload.whiteCards,
+                name: payload.username,
+                room: payload.room,
+                leading: payload.leading,
+                blackCard: payload.blackCard,
+                whiteCards: payload.whiteCards,
                 choosedCard: false,
                 awaitMessage: null,
                 winner: null,
                 guessCards: [],
-                playersInfo: action.payload.otherPlayersInfo
+                playersInfo: payload.otherPlayersInfo
             }
         break
 
         case 'WAIT_FOR_GAME':
             return {
                 ...state,
-                awaitMessage: action.payload
+                awaitMessage: payload.awaitMessage,
+                room: payload.room,
             }
         break
 
         case 'DELETE_CHOOSEN_CARD':
-            let choosenCard = action.payload
+            let choosenCard = payload
             const newHand = state.whiteCards.filter((card) => (card.id !== choosenCard.id))
             return {
                 ...state,
@@ -50,7 +51,7 @@ const reducer = (state = initialState, action) => {
         case 'ADD_GUESS_CARD':
             return {
                 ...state,
-                guessCards: [...state.guessCards, action.payload]
+                guessCards: [...state.guessCards, payload]
             }
         break
 
@@ -64,7 +65,7 @@ const reducer = (state = initialState, action) => {
         case 'SHOW_WINNER':
             return {
                 ...state,
-                winner: action.payload.winner,
+                winner: payload.winner,
                 choosedCard: true
             }
         break

@@ -1,13 +1,16 @@
 import React, { useEffect } from "react"
 import { connect } from 'react-redux'
 import { start, disconnect } from '../redux/actions'
+import useExitPrompt from "../hooks/useExitPrompt"
 
 import LoginPage from "./LoginPage"
 import Game from "./GameComponent"
-import Home from "../containers/Home"
+import Home from "./Home"
 import Loading from "../containers/Loading"
 
 const App = ({ name, room, awaitMessage, start, disconnect }) => {
+
+  const [showExitPrompt, setShowExitPrompt] = useExitPrompt(true);
 
   let loginNeeded = name && room ? false : true 
 
@@ -15,6 +18,12 @@ const App = ({ name, room, awaitMessage, start, disconnect }) => {
     start()
     return () => {
       disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      setShowExitPrompt(false);
     }
   }, [])
 
